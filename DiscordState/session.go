@@ -36,7 +36,6 @@ func (Session *Session) Start() error {
 	if err != nil {
 		return err
 	}
-
 	Session.Guilds = UserGuilds
 
 	Session.DiscordGo = dg
@@ -105,8 +104,25 @@ func (Session *Session) NewState(GuildID string, MessageAmount int) (*State, err
 	State.Messages = []*discordgo.Message{}
 
 	//Retrieve Channels
-
 	State.Channels = State.Guild.Channels
+
+	return State, nil
+}
+
+func (Session *Session) NewPrivateState(UserID string, MessageAmount int) (*State, error) {
+	State := new(State)
+
+	//Disable Event Handling
+	State.Enabled = false
+
+	//Set Session
+	State.Session = Session
+
+	State.MessageAmount = MessageAmount
+
+	State.Messages = []*discordgo.Message{}
+
+	State.Channels = Session.PrivateChannels
 
 	return State, nil
 }
@@ -117,7 +133,14 @@ func (Session *Session) Update() error {
 	if err != nil {
 		return err
 	}
-
 	Session.Guilds = UserGuilds
+
+	PrivateChannels, err := Session.DiscordGo.UserChannels()
+	if err != nil {
+		return err
+	}
+	Session.PrivateChannels = PrivateChannels
+
 	return nil
 }
+

@@ -6,7 +6,7 @@ import (
 	"log"
 	"regexp"
 
-	"github.com/Rivalo/discord-cli/DiscordState"
+	"github.com/echoline/discord-cli/DiscordState"
 	"github.com/chzyer/readline"
 )
 
@@ -44,6 +44,12 @@ func main() {
 		log.Println("Session Failed")
 		log.Fatalln(err)
 	}
+
+	PrivateChannels, err := Session.DiscordGo.UserChannels()
+	if err != nil {
+		log.Fatalln(err)
+	}
+	Session.PrivateChannels = PrivateChannels
 
 	//Attach New Window
 	InitWindow()

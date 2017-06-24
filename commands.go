@@ -15,6 +15,9 @@ func ParseForCommands(line string) string {
 	case ":c":
 		SelectChannel()
 		line = ""
+	case ":p":
+		SelectPrivateChannel()
+		line = ""
 	default:
 		// Nothing
 	}
@@ -58,3 +61,11 @@ func SelectChannel() {
 	State.Enabled = true
 	ShowContent()
 }
+
+func SelectPrivateChannel() {
+	State.Enabled = false
+	SelectPrivateChannelMenu()
+	State.Enabled = true
+	ShowContent()
+}
+

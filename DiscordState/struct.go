@@ -22,4 +22,5 @@ type Session struct {
 	Password  string
 	DiscordGo *discordgo.Session
 	Guilds    []*discordgo.Guild
+	PrivateChannels      []*discordgo.Channel
 }

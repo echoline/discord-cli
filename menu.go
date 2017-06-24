@@ -49,6 +49,42 @@ Start:
 	}
 }
 
+func SelectPrivateChannelMenu() {
+Start:
+	Msg(InfoMsg, "Select a Private Channel:\n")
+
+	SelectMap := make(map[int]string)
+	SelectID := 0
+
+	for _, channel := range Session.PrivateChannels {
+		if channel.IsPrivate {
+			SelectMap[SelectID] = channel.ID
+			Msg(TextMsg, "[%d] %s\n", SelectID, channel.Recipient.Username)
+			SelectID++
+		}
+	}
+
+	var response string
+	fmt.Scanf("%s\n", &response)
+
+	ResponseInteger, err := strconv.Atoi(response)
+	if err != nil {
+		Msg(ErrorMsg, "(GU) Conversion Error: %s\n", err)
+		goto Start
+	}
+
+	if ResponseInteger > SelectID-1 || ResponseInteger < 0 {
+		Msg(ErrorMsg, "(GU) Error: ID is out of bounds\n")
+		goto Start
+	}
+
+	State, err = Session.NewPrivateState(SelectMap[ResponseInteger], Config.Messages)
+	if err != nil {
+		log.Fatal(err)
+	}
+	State.SetChannel(SelectMap[ResponseInteger])
+}
+
 //SelectChannelMenu is a menu item that sets the current channel
 func SelectChannelMenu() {
 Start:
@@ -95,6 +131,7 @@ Start:
 	Msg(TextMsg, "[n] Join New Server\n")
 	Msg(TextMsg, "[d] Leave Server\n")
 	Msg(TextMsg, "[o] Join Official discord-cli Server\n")
+	Msg(TextMsg, "[p] Select Private Channel\n")
 	Msg(TextMsg, "[b] Go Back\n")
 
 	var response string
@@ -134,6 +171,8 @@ Start:
 	case "d":
 		LeaveServerMenu()
 		goto Start
+	case "p":
+		SelectPrivateChannelMenu()
 	default:
 		return
 	}
