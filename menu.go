@@ -22,6 +22,7 @@ Start:
 		Msg(TextMsg, "[%d] %s\n", SelectID, guild.Name)
 		SelectID++
 	}
+	Msg(TextMsg, "[p] Select Private Channel\n")
 	Msg(TextMsg, "[b] Extra Options\n")
 
 	var response string
@@ -30,6 +31,11 @@ Start:
 	if response == "b" {
 		ExtraGuildMenuOptions()
 		goto Start
+	}
+
+	if response == "p" {
+		SelectPrivateChannelMenu()
+		return
 	}
 
 	ResponseInteger, err := strconv.Atoi(response)
@@ -46,7 +52,10 @@ Start:
 	State, err = Session.NewState(SelectMap[ResponseInteger], Config.Messages)
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
+
+	SelectChannelMenu()
 }
 
 func SelectPrivateChannelMenu() {
@@ -131,7 +140,6 @@ Start:
 	Msg(TextMsg, "[n] Join New Server\n")
 	Msg(TextMsg, "[d] Leave Server\n")
 	Msg(TextMsg, "[o] Join Official discord-cli Server\n")
-	Msg(TextMsg, "[p] Select Private Channel\n")
 	Msg(TextMsg, "[b] Go Back\n")
 
 	var response string
@@ -171,8 +179,6 @@ Start:
 	case "d":
 		LeaveServerMenu()
 		goto Start
-	case "p":
-		SelectPrivateChannelMenu()
 	default:
 		return
 	}

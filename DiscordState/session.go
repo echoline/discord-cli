@@ -38,6 +38,12 @@ func (Session *Session) Start() error {
 	}
 	Session.Guilds = UserGuilds
 
+	PrivateChannels, err := dg.UserChannels()
+	if err != nil {
+		return err
+	}
+	Session.PrivateChannels = PrivateChannels
+
 	Session.DiscordGo = dg
 
 	Session.User, _ = Session.DiscordGo.User("@me")

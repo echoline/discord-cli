@@ -45,12 +45,6 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	PrivateChannels, err := Session.DiscordGo.UserChannels()
-	if err != nil {
-		log.Fatalln(err)
-	}
-	Session.PrivateChannels = PrivateChannels
-
 	//Attach New Window
 	InitWindow()
 
@@ -91,7 +85,6 @@ func main() {
 //InitWindow creates a New CLI Window
 func InitWindow() {
 	SelectGuildMenu()
-	SelectChannelMenu()
 	State.Enabled = true
 	ShowContent()
 }
