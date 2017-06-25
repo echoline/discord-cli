@@ -11,7 +11,7 @@ import (
 func newMessage(s *discordgo.Session, m *discordgo.MessageCreate) {
 	//Global Mentions
 	Mention := "@" + State.Session.User.Username
-	if strings.Contains(m.ContentWithMentionsReplaced(), Mention) {
+	if strings.Contains(m.ContentWithMentionsReplaced(), Mention) || strings.Contains(m.ContentWithMentionsReplaced(), "@everyone") {
 		go Notify(m.Message)
 	}
 

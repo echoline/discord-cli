@@ -139,7 +139,6 @@ Start:
 	Msg(InfoMsg, "Extra Options:\n")
 	Msg(TextMsg, "[n] Join New Server\n")
 	Msg(TextMsg, "[d] Leave Server\n")
-	Msg(TextMsg, "[o] Join Official discord-cli Server\n")
 	Msg(TextMsg, "[b] Go Back\n")
 
 	var response string
@@ -158,24 +157,14 @@ Start:
 			Msg(ErrorMsg, "Invalid Invite\n")
 			goto New
 		}
-		Msg(TextMsg, "Join %s ? [y/n]:\n", Invite.Guild.Name)
-		fmt.Scanf("%s\n", &response)
-		if response == "y" {
-			Session.DiscordGo.InviteAccept(Invite.Code)
-			err := Session.Update()
-			if err != nil {
-				Msg(ErrorMsg, "Session Update Failed: %s\n", err)
-			}
-		} else {
-			goto Start
-		}
-	case "o":
-		_, err := Session.DiscordGo.InviteAccept("0pXWCo5RQbVuFHDM")
+		Invite, err = Session.DiscordGo.InviteAccept(Invite.Code)
 		if err != nil {
-			Msg(ErrorMsg, "Joining Official discord-cli Server failed\n")
-			goto Start
+			Msg(ErrorMsg, "InviteAccept Failed: %s\n", err)
 		}
-		Msg(InfoMsg, "Joined Official discord-cli Server!\n")
+		err = Session.Update()
+		if err != nil {
+			Msg(ErrorMsg, "Session Update Failed: %s\n", err)
+		}
 	case "d":
 		LeaveServerMenu()
 		goto Start

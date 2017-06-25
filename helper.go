@@ -87,9 +87,7 @@ func PrintMessages(Amount int) {
 			Messages := ReceivingMessageParser(m)
 
 			for _, Msg := range Messages {
-				//log.Printf("> %s > %s\n", UserName(m.Author.Username), Msg)
 				MessagePrint(m.Timestamp, m.Author.Username, Msg)
-
 			}
 		}
 	}
@@ -109,7 +107,7 @@ func Notify(m *discordgo.Message) {
 	cmd := exec.Command("notify-send", Title, m.ContentWithMentionsReplaced())
 	err = cmd.Start()
 	if err != nil {
-		Msg(ErrorMsg, "(NOT) Check if libnotify is installed, or disable notifications.\n")
+		Msg(ErrorMsg, "%s > %s > %s > %s\n", Guild.Name, Channel.Name, m.Author.Username, m.ContentWithMentionsReplaced())
 	}
 
 }
