@@ -58,7 +58,6 @@ func Clear() {
 //Header simply prints a header containing state/session information
 func Header() {
 	if State.Guild != nil {
-		Msg(InfoMsg, "Welcome, %s!\n\n", State.Session.User.Username)
 		Msg(InfoMsg, "Guild: %s, Channel: %s\n", State.Guild.Name, State.Channel.Name)
 	} else {
 		Msg(InfoMsg, "Recipient: %s\n", State.Channel.Recipient.Username)
@@ -82,6 +81,10 @@ func ReceivingMessageParser(m *discordgo.Message) []string {
 
 //PrintMessages prints amount of Messages to CLI
 func PrintMessages(Amount int) {
+	err := State.RetrieveMessages(Amount)
+	if err != nil {
+		Msg(ErrorMsg, "Error: RetrieveMessages(%d): %s\n", Amount, err)
+	}
 	for Key, m := range State.Messages {
 		if Key >= len(State.Messages)-Amount {
 			Messages := ReceivingMessageParser(m)

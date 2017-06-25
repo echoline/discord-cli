@@ -28,11 +28,6 @@ func (State *State) AddMessage(Message *discordgo.Message) {
 		return
 	}
 
-	//Remove First Message if next message is going to increase length past MessageAmount
-	if len(State.Messages) == State.MessageAmount {
-		State.Messages = append(State.Messages[:0], State.Messages[1:]...)
-	}
-
 	State.Messages = append(State.Messages, Message)
 }
 
@@ -61,6 +56,7 @@ func (State *State) RetrieveMessages(Amount int) error {
 		return err
 	}
 
+	State.Messages = nil
 	//Reverse insert Messages
 	for i := 0; i < len(Messages); i++ {
 		State.AddMessage(Messages[len(Messages)-i-1])
